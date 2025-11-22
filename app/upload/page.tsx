@@ -19,10 +19,10 @@ export default function UploadPage() {
 
     // Links State
     const [authorLinks, setAuthorLinks] = useState([
-        { platform: 'Twitter', url: '', isCustom: false }
+        { platform: 'YouTube', url: '', isCustom: false }
     ]);
 
-    const SOCIAL_PRESETS = ['Twitter', 'YouTube', 'Reddit', 'Instagram', 'Patreon', 'Ko-fi'];
+    const SOCIAL_PRESETS = ['YouTube', 'Twitter', 'Reddit', 'Instagram', 'Patreon', 'Ko-fi'];
 
     // --- Input Handlers ---
     const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
