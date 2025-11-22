@@ -16,7 +16,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       {/* REMOVED "bg-black" and added "bg-white text-gray-900" */}
       <body className={`${inter.className} bg-white text-gray-900`}>
         <Navbar />
-        <main className="min-h-screen">
+        <main className="">
           {children}
         </main>
       </body>
