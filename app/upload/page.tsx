@@ -162,7 +162,6 @@ export default function UploadPage() {
                         <div>
                             <h3 className="font-black uppercase text-lg mb-1">Rules of Engagement</h3>
                             <ul className="list-disc list-inside text-sm font-bold text-gray-600 space-y-1">
-                                <li>Check if the animation is <strong>already uploaded</strong>.</li>
                                 <li>Link directly to <strong>YouTube, Twitter, or Reddit</strong>.</li>
                                 <li>Use <strong>Official Numbering</strong> for Manga chapters.</li>
                             </ul>
@@ -220,8 +219,8 @@ export default function UploadPage() {
                                         value={formData.animationType}
                                         onChange={e => setFormData({ ...formData, animationType: e.target.value })}
                                     >
-                                        <option value="fan">🎨 Fan Animation - Based on Manga (Official Story)</option>
-                                        <option value="canon">🔥 Fan Animation - Fanon (VS Battles, What-Ifs)</option>
+                                        <option value="canon">🎨 Fan Animation - Based on Manga (Official Story)</option>
+                                        <option value="fan">🔥 Fan Animation - Fanon (VS Battles, What-Ifs)</option>
                                     </select>
                                     <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">🔻</div>
                                 </div>

@@ -8,7 +8,30 @@ import { User, AlertOctagon, ExternalLink, BookOpen, Upload } from 'lucide-react
 import Link from 'next/link';
 
 // --- CONFIG ---
-const LATEST_MANGA_CHAPTER = 210;
+const CUBARI_GIST_URL = "https://gist.githubusercontent.com/funkyhippo/dd19d65768c8be19711fe9e20045d8f5/raw/opm-scrapped.json";
+
+// Function to fetch the latest chapter number
+async function getLatestChapterNumber(): Promise<number> {
+    try {
+        const response = await fetch(CUBARI_GIST_URL);
+        const data = await response.json();
+
+        // Get all chapter keys and convert to numbers
+        const chapterNumbers = Object.keys(data.chapters)
+            .map(key => {
+                // Handle keys like "0099", "100", "100." etc.
+                const cleanKey = key.replace('.', ''); // Remove dots
+                return parseInt(cleanKey, 10);
+            })
+            .filter(num => !isNaN(num)); // Filter out NaN values
+
+        // Return the highest chapter number
+        return Math.max(...chapterNumbers);
+    } catch (error) {
+        console.error('Failed to fetch latest chapter:', error);
+        return 999; // Fallback to 999 if no chapters detected
+    }
+}
 
 type TimelineItem =
     | { type: 'video'; data: VideoData }
@@ -45,10 +68,15 @@ const ChapterLinkMobile = ({ chapter }: { chapter: number }) => (
 export default function CanonPage() {
     const [timelineItems, setTimelineItems] = useState<TimelineItem[]>([]);
     const [loading, setLoading] = useState(true);
+    const [latestMangaChapter, setLatestMangaChapter] = useState(999); // Default to 999
 
     useEffect(() => {
         const fetchAndProcessVideos = async () => {
-            // Fetch Canon Videos
+            // Fetch latest chapter first
+            const latestChapter = await getLatestChapterNumber();
+            setLatestMangaChapter(latestChapter);
+
+            // Then fetch Canon Videos
             const q = query(collection(db, "animations"), where("status", "==", "approved_canon"));
             const querySnapshot = await getDocs(q);
             const videos = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as VideoData));
@@ -72,8 +100,9 @@ export default function CanonPage() {
                 maxChapterCovered = Math.max(maxChapterCovered, video.chapterEnd);
             });
 
-            if (maxChapterCovered < LATEST_MANGA_CHAPTER) {
-                processed.push({ type: 'gap', start: maxChapterCovered + 1, end: LATEST_MANGA_CHAPTER });
+            // Use the dynamic latest chapter here
+            if (maxChapterCovered < latestChapter) {
+                processed.push({ type: 'gap', start: maxChapterCovered + 1, end: latestChapter + 8 });
             }
 
             setTimelineItems(processed);
@@ -82,6 +111,7 @@ export default function CanonPage() {
 
         fetchAndProcessVideos();
     }, []);
+
 
     return (
         <div className="min-h-screen bg-gray-100 font-sans relative overflow-x-hidden">
