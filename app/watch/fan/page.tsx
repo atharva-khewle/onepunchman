@@ -145,14 +145,21 @@ export default function FanPage() {
                                     ))}
                                 </div>
 
-                                {/* Description */}
-                                <div className="mb-6 flex-1 relative">
-                                    {/* Quote mark for style */}
-                                    <span className="absolute -top-2 -left-2 text-4xl font-serif text-gray-200 leading-none select-none">“</span>
-                                    <p className="text-sm font-bold text-gray-700 leading-relaxed italic relative z-10 line-clamp-3">
-                                        {video.description || "No description provided."}
-                                    </p>
-                                </div>
+                                {/* Author Quote (if available) */}
+                                {video.authorQuote && video.authorQuote.trim() !== '' && (
+                                    <div className="mb-4 relative">
+                                        <div className="absolute -left-1 top-0 bottom-0 w-1 bg-yellow-400 rounded-full"></div>
+                                        <div className="pl-4">
+                                            <span className="text-[10px] font-black uppercase text-gray-500 tracking-wider block mb-1">
+                                                Creator's Note
+                                            </span>
+                                            <p className="text-sm font-bold text-gray-800 leading-relaxed italic line-clamp-3">
+                                                "{video.authorQuote}"
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
+
 
                                 {/* Footer Actions */}
                                 <div className="pt-4 border-t-2 border-gray-100 flex justify-between items-end">

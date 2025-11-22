@@ -14,6 +14,7 @@ export default function UploadPage() {
         chapterEnd: 1,
         description: '',
         animationType: 'fan',
+        authorQuote: '', // NEW: Author quote field
     });
 
     // Links State
@@ -26,6 +27,11 @@ export default function UploadPage() {
     // --- Input Handlers ---
     const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         if (e.target.value.length <= 1000) setFormData({ ...formData, description: e.target.value });
+    };
+
+    // NEW: Author quote handler
+    const handleAuthorQuoteChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        if (e.target.value.length <= 500) setFormData({ ...formData, authorQuote: e.target.value });
     };
 
     const addLinkField = () => {
@@ -99,6 +105,7 @@ export default function UploadPage() {
                 chapterStart: Number(formData.chapterStart),
                 chapterEnd: Number(formData.chapterEnd),
                 authorLinks: cleanLinks,
+                authorQuote: formData.authorQuote.trim(), // NEW: Include author quote
                 timestamp: Date.now(),
                 status: "pending",
                 likes: 0
@@ -114,6 +121,7 @@ export default function UploadPage() {
                 chapterEnd: 1,
                 description: '',
                 animationType: 'fan',
+                authorQuote: '', // NEW: Reset author quote
             });
             setAuthorLinks([{ platform: 'Twitter', url: '', isCustom: false }]);
 
@@ -203,7 +211,7 @@ export default function UploadPage() {
                                 </div>
                             </div>
 
-                            {/* Type Selector */}
+                            {/* Type Selector - UPDATED WITH CLEARER DESCRIPTIONS */}
                             <div className="col-span-1 md:col-span-2">
                                 <label className="block font-black text-xs uppercase tracking-widest mb-2 ml-1">Category</label>
                                 <div className="relative">
@@ -212,10 +220,14 @@ export default function UploadPage() {
                                         value={formData.animationType}
                                         onChange={e => setFormData({ ...formData, animationType: e.target.value })}
                                     >
-                                        <option value="fan">Fan Animation (Original/Creative)</option>
-                                        <option value="canon">Canon Adaptation (Manga Story)</option>
+                                        <option value="fan">🎨 Fan Animation - Based on Manga (Official Story)</option>
+                                        <option value="canon">🔥 Fan Animation - Fanon (VS Battles, What-Ifs)</option>
                                     </select>
                                     <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">🔻</div>
+                                </div>
+                                <div className="mt-2 text-xs text-gray-500 font-medium space-y-1">
+                                    <div>• <strong>Based on Manga:</strong> Animates actual manga chapters/scenes</div>
+                                    <div>• <strong>Original/Fanon:</strong> Creative works like "Saitama vs Goku", original fights</div>
                                 </div>
                             </div>
                         </div>
@@ -314,6 +326,26 @@ export default function UploadPage() {
                                 </div>
                             ))}
                         </div>
+                    </div>
+
+
+                    {/* --- AUTHOR QUOTE SECTION --- */}
+                    <div>
+                        <div className="flex justify-between mb-2 ml-1">
+                            <label className="block font-black text-xs uppercase tracking-widest">
+                                Creator's Quote
+                                <span className="text-gray-400 font-normal ml-2">(Only fill if you are the original author)</span>
+                            </label>
+                            <span className={`text-xs font-black ${formData.authorQuote.length >= 500 ? 'text-red-600' : 'text-gray-400'}`}>
+                                {formData.authorQuote.length}/500
+                            </span>
+                        </div>
+                        <textarea
+                            className="w-full p-4 bg-white border-2 border-yellow-400 rounded shadow-[4px_4px_0px_gray] focus:shadow-[4px_4px_0px_black] focus:translate-x-[-2px] focus:translate-y-[-2px] h-24 outline-none resize-none font-medium text-gray-700 leading-relaxed"
+                            value={formData.authorQuote}
+                            onChange={handleAuthorQuoteChange}
+                            placeholder={`Only If you're the creator, share your thoughts about this work... \n(Please do not spam shit like JC Staff)`}
+                        />
                     </div>
 
 

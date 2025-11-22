@@ -16,6 +16,7 @@ export interface VideoData {
     description: string;          // Description or Creator's notes
     animationType: AnimationType; // Classification
     authorLinks: AuthorLink[];    // List of social links
+    authorQuote: string;          // NEW: Quote from the original author
     timestamp: number;            // Date.now() format
     status: VideoStatus;          // Approval status
     likes: number;                // Support count

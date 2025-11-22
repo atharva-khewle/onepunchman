@@ -4,53 +4,9 @@ import { auth, db } from '@/lib/firebase';
 import { signInWithEmailAndPassword, onAuthStateChanged, User } from 'firebase/auth';
 import { collection, query, where, getDocs, doc, updateDoc } from 'firebase/firestore';
 import { X, Check, Trash2, ExternalLink, BookOpen, MonitorPlay, LogOut, PlayCircle, FileText, User as UserIcon, Youtube, Instagram, Twitter, Globe, AlertOctagon } from 'lucide-react';
+import VideoPlayer from '../components/VideoPlayer';
 
-// --- VIDEO PLAYER COMPONENT (Keep inline for simplicity in Admin) ---
-function VideoPlayer({ url }: { url: string }) {
-    const getYouTubeID = (link: string) => {
-        if (!link) return null;
-        // Flexible regex for various YouTube link formats
-        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-        const match = link.match(regExp);
-        return (match && match[2].length === 11) ? match[2] : null;
-    };
 
-    const ytID = getYouTubeID(url);
-
-    if (ytID) {
-        return (
-            <div className="relative w-full pt-[56.25%] bg-black group overflow-hidden border-b-4 border-black shadow-inner">
-                <iframe
-                    className="absolute top-0 left-0 w-full h-full"
-                    src={`https://www.youtube.com/embed/${ytID}?rel=0&modestbranding=1`}
-                    title="Content Preview"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                />
-            </div>
-        );
-    }
-
-    return (
-        <div className="relative w-full pt-[56.25%] bg-gray-100 group border-b-4 border-black">
-            <a
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-4 text-center hover:bg-yellow-50 transition-colors"
-            >
-                <PlayCircle size={48} className="text-gray-800 group-hover:text-red-600 transition-colors duration-300" />
-                <div>
-                    <p className="text-gray-900 font-black text-sm uppercase tracking-wider">External Source</p>
-                    <p className="text-gray-500 text-xs mt-1 flex items-center justify-center gap-1 font-bold">
-                        Open Original Link <ExternalLink size={10} />
-                    </p>
-                </div>
-            </a>
-        </div>
-    );
-}
 
 // --- HELPER FOR SOCIAL ICONS ---
 function SocialIcon({ platform }: { platform: string }) {
@@ -180,11 +136,23 @@ export default function AdminPanel() {
                                     <h3 className="font-bold text-sm text-gray-500 uppercase tracking-wider mb-1">Uploaded By</h3>
                                     <p className="font-black text-xl leading-none mb-4 line-clamp-1">{v.creatorName || "Unknown"}</p>
 
-                                    <h3 className="font-bold text-sm text-gray-500 uppercase tracking-wider mb-1">Description</h3>
-                                    <p className="text-sm text-gray-800 line-clamp-3 leading-relaxed italic bg-gray-50 p-2 rounded border border-gray-200">
-                                        "{v.description || 'No description provided.'}"
-                                    </p>
-                                </div>
+                                    {/* Author Quote */}
+                                    {v.authorQuote && v.authorQuote.trim() !== '' && (
+                                        <div className="mb-3">
+                                            <h3 className="font-bold text-sm text-gray-500 uppercase tracking-wider mb-1">Author Quote</h3>
+                                            <p className="text-sm text-gray-800 line-clamp-2 leading-relaxed italic bg-yellow-50 p-2 rounded border border-yellow-200">
+                                                "{v.authorQuote}"
+                                            </p>
+                                        </div>
+                                    )}
+
+                                    {/* Description */}
+                                    <div className="mb-3">
+                                        <h3 className="font-bold text-sm text-gray-500 uppercase tracking-wider mb-1">Description</h3>
+                                        <p className="text-sm text-gray-800 line-clamp-3 leading-relaxed italic bg-gray-50 p-2 rounded border border-gray-200">
+                                            "{v.description || 'No description provided.'}"
+                                        </p>
+                                    </div>                                </div>
 
                                 {/* Action */}
                                 <button
@@ -279,6 +247,17 @@ export default function AdminPanel() {
                                         </div>
                                     </div>
 
+                                    {/* Author Quote in Inspector */}
+                                    {inspecting.authorQuote && inspecting.authorQuote.trim() !== '' && (
+                                        <div className="mt-4 pt-4 border-t border-gray-200">
+                                            <span className="text-[10px] text-gray-500 uppercase font-bold block mb-1">Author Quote</span>
+                                            <p className="text-sm italic bg-yellow-50 p-3 border border-yellow-300 rounded leading-relaxed text-gray-700">
+                                                "{inspecting.authorQuote}"
+                                            </p>
+                                        </div>
+                                    )}
+
+                                    {/* Description in Inspector */}
                                     <div className="mt-4 pt-4 border-t border-gray-200">
                                         <span className="text-[10px] text-gray-500 uppercase font-bold block mb-1">Description / Comment</span>
                                         <p className="text-sm italic bg-gray-50 p-3 border border-gray-300 rounded leading-relaxed text-gray-700">

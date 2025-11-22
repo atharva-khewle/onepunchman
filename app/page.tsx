@@ -71,7 +71,7 @@ export default function Home() {
           {/* 3. Manifesto Text - Bolder and larger on LG */}
           <div className="mb-8 lg:mb-12 md:pr-20">
             <p className="text-lg lg:text-2xl font-bold text-gray-900 border-l-4 lg:border-l-8 border-yellow-400 pl-4 lg:pl-6 mb-3 lg:mb-4 leading-tight">
-              We waited years. Expected greatness.<br />
+              We waited years. Expected Peak.<br />
               All we got was DISAPPOINTMENT.
             </p>
             <p className="text-gray-600 text-sm lg:text-lg leading-relaxed font-medium">
